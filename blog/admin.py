@@ -39,16 +39,22 @@ class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'publish_time'
     list_editable = ('draft',)
     inlines = [PostSettingInline,]
-    actions = ['make_published', 'make_draft']
+    actions = ['make_published', 'make_draft', 'allow_discoussion']
 
     def make_published(self, request, queryset):
         queryset.update(draft=False)
 
     make_published.short_description = "Exit selected post from draft"
 
-    # def allow_discoution(self, request, queryset):
-    #     queryset.update(post_setting__allow_discusstion=True)
-    # allow_discoution.short_description = "allow user write comment on posts"
+    # def allow_discoussion(self, request, queryset):
+    #     if queryset.get(postsetting):
+    #           PostSetting.create()
+    #     else:
+    #           queryset.update(postsetting__allow_discusstion=True)
+
+    # there is no object for update and should create object at first (maybe in models.py)
+
+    # allow_discoussion.short_description = "allow user write comment on posts"
 
 
 @admin.register(Comment)
