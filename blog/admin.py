@@ -38,7 +38,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ('draft', 'category', 'author')
     date_hierarchy = 'publish_time'
     list_editable = ('draft',)
-    inlines = (PostSettingInline,)
+    inlines = [PostSettingInline,]
     actions = ['make_published', 'make_draft']
 
     def make_published(self, request, queryset):
@@ -49,8 +49,6 @@ class PostAdmin(admin.ModelAdmin):
     # def allow_discoution(self, request, queryset):
     #     queryset.update(post_setting__allow_discusstion=True)
     # allow_discoution.short_description = "allow user write comment on posts"
-
-    actions = [make_published]
 
 
 @admin.register(Comment)
