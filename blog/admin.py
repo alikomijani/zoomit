@@ -19,6 +19,8 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'parent')
     search_fields = ('slug', 'title')
     list_filter = ('parent',)
+    prepopulated_fields = {'slug': ('title',)}
+    list_per_page = 4
     inlines = [
         ChildrenItemInline,
     ]
@@ -30,13 +32,14 @@ class PostSettingInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'create_at', 'update_at',
-                    'publish_time', 'draft', 'category', 'author')
+    list_display = ('title', 'convert_create_date',
+                    'convert_publish_date', 'draft', 'category', 'comment_count', 'author')
     search_fields = ('title',)
     list_filter = ('draft', 'category', 'author')
     date_hierarchy = 'publish_time'
     list_editable = ('draft',)
     inlines = (PostSettingInline,)
+    actions = ['make_published', 'make_draft']
 
     def make_published(self, request, queryset):
         queryset.update(draft=False)
