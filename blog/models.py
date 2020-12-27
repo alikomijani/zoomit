@@ -100,3 +100,4 @@ class Comment(models.Model):
     def dislike_count(self):
         q = self.comment_like.filter(condition=False)
         return q.count()
+

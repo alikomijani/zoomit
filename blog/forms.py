@@ -10,3 +10,12 @@ class CommentForm(forms.ModelForm):
         labels = {'content': _("Comment"), }
         help_texts = {'content': _('enter your comment'), }
         widgets = {'content': forms.Textarea}
+
+
+class CommentLikeForm(forms.Form):
+    condition = forms.CharField()
+    comment = forms.IntegerField()
+
+    def clean_condition(self):
+        condition = self.cleaned_data['condition']
+        return condition == 'true'
