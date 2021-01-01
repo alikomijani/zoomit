@@ -19,14 +19,15 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    title = models.CharField(_("Title"), max_length=128)
+    title = models.CharField(_("Title"), max_length=250)
     slug = models.SlugField(_("Slug"), db_index=True, unique=True)
     content = models.TextField(_("Content"))
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     publish_time = models.DateTimeField(_("Publish at"), db_index=True)
     draft = models.BooleanField(_("Draft"), default=True, db_index=True)
-    image = models.ImageField(_("image"), upload_to='post/images')
+    image = models.ImageField(
+        _("image"), upload_to='post/images', null=True, blank=True)
     category = models.ForeignKey(Category, related_name='posts', verbose_name=_(
         "Category"), on_delete=models.SET_NULL, null=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"),
@@ -100,4 +101,3 @@ class Comment(models.Model):
     def dislike_count(self):
         q = self.comment_like.filter(condition=False)
         return q.count()
-

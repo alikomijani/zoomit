@@ -37,12 +37,14 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True, db_index=True)
-    avatar = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True, )
+    avatar = models.ImageField(
+        _("avatar"), upload_to='user/avatars', blank=True, )
     full_name = models.CharField(_('display name'), max_length=150, default='')
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
-        help_text=_('Designates whether the user can log into this admin site.'),
+        help_text=_(
+            'Designates whether the user can log into this admin site.'),
     )
     is_active = models.BooleanField(
         _('active'),

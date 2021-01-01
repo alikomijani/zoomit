@@ -6,20 +6,21 @@ from pip._internal import req
 
 from .models import Post, Category, CommentLike, Comment
 from .forms import CommentForm, CommentLikeForm
-from django.contrib.auth import get_user_model
 from datetime import datetime
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
 class PostArchive(LoginRequiredMixin, ListView):
     model = Post
-    queryset = Post.objects.filter(draft=False, publish_time__lte=datetime.now())
+    queryset = Post.objects.filter(
+        draft=False, publish_time__lte=datetime.now())
     ordering = ('publish_time',)
     template_name = 'blog/post_archive.html'
 
@@ -73,8 +74,10 @@ def like_comment(request):
         comment_like.condition = data['condition']
         comment_like.save()
     except CommentLike.DoesNotExist:
-        CommentLike.objects.create(author=user, condition=data['condition'], comment=comment)
-    response = {"like_count": comment.like_count, 'dislike_count': comment.dislike_count}
+        CommentLike.objects.create(
+            author=user, condition=data['condition'], comment=comment)
+    response = {"like_count": comment.like_count,
+                'dislike_count': comment.dislike_count}
     return HttpResponse(json.dumps(response), status=201)
 
 
@@ -83,7 +86,8 @@ def create_comment(request):
     data = json.loads(request.body)
     user = request.user
     try:
-        comment = Comment.objects.create(post_id=data['post_id'], content=data['content'], author=user)
+        comment = Comment.objects.create(
+            post_id=data['post_id'], content=data['content'], author=user)
         response = {"comment_id": comment.id, "content": comment.content, 'dislike_count': 0, 'like_count': 0,
                     'full_name': user.get_full_name()}
         return HttpResponse(json.dumps(response), status=201)
@@ -94,7 +98,8 @@ def create_comment(request):
 
 def post_single(request, slug):
     try:
-        post = Post.objects.select_related('post_setting', 'category', 'author').get(slug=slug)
+        post = Post.objects.select_related(
+            'post_setting', 'category', 'author').get(slug=slug)
     except Post.DoesNotExist:
         raise Http404('post not found')
     context = {
