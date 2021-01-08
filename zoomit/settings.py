@@ -24,6 +24,11 @@ SECRET_KEY = 'e+*13$0$b2ly8_ob6va7w7!+j_#!n5^+de9v-4$l#$mqco5n2w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
+
 ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'account.User'
 # Application definition

@@ -34,10 +34,6 @@ class Post(models.Model):
                                related_name='posts', related_query_name='children',
                                on_delete=models.SET_NULL, null=True, blank=True)
 
-    @property
-    def get_title(self):
-        return self.title.strip()
-
     class Meta:
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
