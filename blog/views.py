@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from pip._internal import req
 
 from .models import Post, Category, CommentLike, Comment
 from .forms import CommentForm, CommentLikeForm

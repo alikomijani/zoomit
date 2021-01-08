@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Post, Category, Comment
 from account.serializers import UserSerializer
+
 User = get_user_model()
 
 
@@ -17,6 +18,7 @@ class PostSerializer(serializers.Serializer):
     image = serializers.ImageField(read_only=True, required=False)
     category = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), required=False)
+    author_details = UserSerializer(source='author', read_only=True)
     author = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), required=False)
 
