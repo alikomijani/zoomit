@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from .models import Post, Category, Comment, PostSetting, CommentLike
 
-
+#this
 # Register your models here.
 
 
