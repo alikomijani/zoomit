@@ -45,6 +45,21 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    
+    @property
+    def comment_count(self):
+        q = self.comments.all()
+        return q.count()
+
+    @property
+    def convert_publish_date(self):
+        converted_date = f"{self.publish_time.day} - {self.publish_time.month} - {self.publish_time.year}"
+        return converted_date
+
+    @property
+    def convert_create_date(self):
+        converted_date = f"{self.create_at.day} - {self.create_at.month} - {self.create_at.year}"
+        return converted_date
 
 
 class PostSetting(models.Model):
@@ -53,7 +68,7 @@ class PostSetting(models.Model):
         on_delete=models.CASCADE)
     comment = models.BooleanField(_("comment"))
     author = models.BooleanField(_("author"))
-    allow_discussion = models.BooleanField(_("allow discussion"))
+    allow_discussion = models.BooleanField(_("allow discussion"), default=True)
 
     class Meta:
         verbose_name = _("PostSetting")

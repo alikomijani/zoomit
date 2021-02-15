@@ -19,6 +19,8 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('slug', 'title', 'parent')
     search_fields = ('slug', 'title')
     list_filter = ('parent',)
+    prepopulated_fields = {'slug': ('title',)}
+    list_per_page = 4
     inlines = [
         ChildrenItemInline,
     ]
@@ -30,24 +32,29 @@ class PostSettingInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'create_at', 'update_at',
-                    'publish_time', 'draft', 'category', 'author')
+    list_display = ('title', 'convert_create_date',
+                    'convert_publish_date', 'draft', 'category', 'comment_count', 'author')
     search_fields = ('title',)
     list_filter = ('draft', 'category', 'author')
     date_hierarchy = 'publish_time'
     list_editable = ('draft',)
-    inlines = (PostSettingInline,)
+    inlines = [PostSettingInline,]
+    actions = ['make_published', 'make_draft', 'allow_discoussion']
 
     def make_published(self, request, queryset):
         queryset.update(draft=False)
 
     make_published.short_description = "Exit selected post from draft"
 
-    # def allow_discoution(self, request, queryset):
-    #     queryset.update(post_setting__allow_discusstion=True)
-    # allow_discoution.short_description = "allow user write comment on posts"
+    # def allow_discoussion(self, request, queryset):
+    #     if queryset.get(postsetting):
+    #           PostSetting.create()
+    #     else:
+    #           queryset.update(postsetting__allow_discusstion=True)
 
-    actions = [make_published]
+    # there is no object for update and should create object at first (maybe in models.py)
+
+    # allow_discoussion.short_description = "allow user write comment on posts"
 
 
 @admin.register(Comment)
